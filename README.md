@@ -83,3 +83,10 @@ go get -u github.com/stretchr/testify
     -   Berkas `go.mod` dan `go.sum` adalah bagian dari sistem manajemen dependensi Go (Go Modules). Mereka digunakan untuk memastikan bahwa proyek dapat dikompilasi dengan benar dengan semua dependensi yang diperlukan.
 9.  **README.md**:
     -   Berkas `README.md` biasanya berisi dokumentasi proyek, termasuk cara mengonfigurasi dan menjalankannya.
+
+## Uji Coba End Point
+
+| Route         | HTTP Method | Deskripsi                            | Postman          |
+|--             |--           |--                                    |--                |
+| /users        | GET         | Mendapatkan semua data user          | ![1](./1.png)      |  
+| /users        | POST         | Buat data user          | ![2](./2.png)      |    
