@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	cfg := config.InitConfig()
 	db := InitDB(*config.InitConfig())
 
 	// Disini Inisialisasi repository
@@ -22,10 +23,10 @@ func main() {
 
 	// Disini Inisialisasi usecase, handler, dan router
 	userUsecase := user.NewUserUsecase(userRepository)
-	userHandler := userHandler.NewUserHandler(userUsecase)
+	userHandler := userHandler.NewUserHandler(userUsecase, cfg.SECRET, cfg.SECRETREFRESH)
 
 	e := echo.New()
-	http.SetRoutesUser(e, userHandler)
+	http.SetRoutesUser(e, userHandler, cfg.SECRET, cfg.SECRETREFRESH)
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", 8000)).Error())
 }
 

@@ -8,6 +8,7 @@ go get -u gorm.io/driver/mysql
 go get github.com/joho/godotenv
 go get github.com/sirupsen/logrus
 go get -u github.com/golang-jwt/jwt/v5
+go get github.com/labstack/echo-jwt/v4
 go get -u github.com/stretchr/testify
 ```
 

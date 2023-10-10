@@ -2,17 +2,24 @@ package user
 
 import (
 	"GoClean/domain/user"
+	"GoClean/helper"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
-	usecase user.UserUsecase
+	usecase       user.UserUsecase
+	secret        string
+	refreshSecret string
 }
 
-func NewUserHandler(usecase user.UserUsecase) *UserHandler {
-	return &UserHandler{usecase}
+func NewUserHandler(usecase user.UserUsecase, secret, refreshSecret string) *UserHandler {
+	return &UserHandler{
+		usecase,
+		secret,
+		refreshSecret,
+	}
 }
 
 func (h *UserHandler) Create(c echo.Context) error {
@@ -50,5 +57,43 @@ func (h *UserHandler) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success get all users",
 		"data":    users,
+	})
+}
+
+func (h *UserHandler) Login(c echo.Context) error {
+	var req struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request")
+	}
+
+	user, err := h.usecase.Authenticate(req.Email, req.Password)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"message": "Invalid username or password",
+		})
+	}
+
+	token, err := helper.GenerateToken(h.secret, user.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": "Internal Server Error",
+		})
+	}
+
+	refreshToken, err := helper.GenerateRefreshToken(h.refreshSecret, user.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": "Internal Server Error",
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message":       "Login Successful",
+		"access_token":  token,
+		"refresh_token": refreshToken,
 	})
 }

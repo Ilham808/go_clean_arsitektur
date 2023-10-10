@@ -28,3 +28,11 @@ func (r *UserRepositoryImpl) FindAll() ([]user.User, error) {
 	}
 	return users, nil
 }
+
+func (r *UserRepositoryImpl) Authenticate(email, password string) (*user.User, error) {
+	var user user.User
+	if err := r.db.Where("email = ? AND password = ?", email, password).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
