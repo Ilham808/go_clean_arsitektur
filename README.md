@@ -90,3 +90,6 @@ go get -u github.com/stretchr/testify
 |--             |--           |--                                    |--                |
 | /users        | GET         | Mendapatkan semua data user          | ![1](./1.png)      |  
 | /users        | POST         | Buat data user          | ![2](./2.png)      |    
+
+## Referensi Aku Belajar
+[Mencoba Clean Architecture pada Golang](https://medium.com/golangid/mencoba-golang-clean-architecture-c2462f355f41) | by Iman Tumorang | GolangID | Medium
